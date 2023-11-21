@@ -1,15 +1,26 @@
 def test_200_code_as_user(client):
     """
-    WHEN the /api/apartment-configs is called
-    AS logged user
+    WHEN the /api/start is called
+    AS anon user
     THEN check that a '200' status code is returned
     """
 
-    response = client.get("/api/start/",
-                          headers={'Authorization': 'bearer '})
+    response = client.post("/api/start/", data={"username": "test"})
 
     assert response.status_code == 200
     assert response.content_type == "application/json"
+
+
+def test_start_game():
+    # Sending a request to start a game with a username
+    start_request = {"username": "tim_user"}
+    response = requests.post(f"{API_BASE_URL}/start", json=start_request)
+
+    # Asserting that the response is successful (status code 200)
+    # and contains gameId and token in the response body
+    assert response.status_code == 200
+    assert "gameId" in response.json()
+    assert "token" in response.json()
 
 # examples:
 #

@@ -16,24 +16,11 @@ def app():
     app = create_app()
     path = os.path.dirname(os.path.abspath(__file__))
 
-    # upload_test_data_to_mongo("apartment_configs",
-    #                           f"{path}/test_datadump/mongo_dump"
-    #                           f".apartment_configs.json")
-    # upload_test_data_to_mongo("shared_configs",
-    #                           f"{path}/test_datadump/mongo_dump"
-    #                           f".shared_configs.json")
-    # upload_test_data_to_mongo("clients",
-    #                           f"{path}/test_datadump/mongo_dump.clients.json")
-
-    # other setup can go here
 
     yield app
 
     # clean up / reset resources here
 
-    # mongo.db["clients"].drop()
-    # mongo.db["apartment_configs"].drop()
-    # mongo.db["shared_configs"].drop()
 
 
 @pytest.fixture(autouse=True)
