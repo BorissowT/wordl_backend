@@ -39,9 +39,6 @@ def create_app(config_class: Config = Config):
         )
         app.register_blueprint(swaggerui_blueprint)
 
-    @app.route('/')
-    def hello_world():  # put application's code here
-        return 'Hello World!'
 
     return app
 
