@@ -3,8 +3,11 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from app.api.start.controllers import start_bp
 from app.config import Config
 from flask_swagger_ui import get_swaggerui_blueprint
+
+from app.extensions import db
 
 
 def create_app(config_class: Config = Config):
@@ -20,7 +23,9 @@ def create_app(config_class: Config = Config):
     app.config['SQLALCHEMY_DATABASE_URI'] = \
         'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
     app.url_map.strict_slashes = False
-    db = SQLAlchemy(app)
+
+    db.init_app(app)
+    # db = SQLAlchemy(app)
 
     if config_class.FLASK_ENV == "development":
         # init swagger
@@ -37,6 +42,14 @@ def create_app(config_class: Config = Config):
 
         )
         app.register_blueprint(swaggerui_blueprint)
+
+        # register blueprints here
+
+        app.register_blueprint(start_bp, url_prefix='/api/')
+
+        # create database
+        # with app.app_context():
+        #     db.create_all()
 
     return app
 
