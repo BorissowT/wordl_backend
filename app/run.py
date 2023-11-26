@@ -1,4 +1,7 @@
+import os
+
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 from app.config import Config
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -6,13 +9,18 @@ from flask_swagger_ui import get_swaggerui_blueprint
 
 def create_app(config_class: Config = Config):
 
+    basedir = os.path.abspath(os.path.dirname(__file__))
+
     # Create app
     app = Flask(__name__)
 
     # Set configuration variables
     app.config.from_object(config_class)
     app.secret_key = app.config['SECRET_KEY']
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
     app.url_map.strict_slashes = False
+    db = SQLAlchemy(app)
 
     if config_class.FLASK_ENV == "development":
         # init swagger
@@ -26,23 +34,24 @@ def create_app(config_class: Config = Config):
             config={  # Swagger UI config overrides
                 'app_name': "Sidecar application"
             },
-            # oauth_config={  # OAuth config.
-            # See
-            # https://github.com/swagger-api/swagger-ui#oauth2-configuration .
-            #    'clientId': "your-client-id",
-            #    'clientSecret': "your-client-secret-if-required",
-            #    'realm': "your-realms",
-            #    'appName': "your-app-name",
-            #    'scopeSeparator': " ",
-            #    'additionalQueryStringParams': {'test': "hello"}
-            # }
+
         )
         app.register_blueprint(swaggerui_blueprint)
-
 
     return app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True, host="0.0.0.0", port=5005)
+
+# import os
+#
+# from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy
+#
+# basedir = os.path.abspath(os.path.dirname(__file__))
+#
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] =\
+#         'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#
+# db = SQLAlchemy(app)
