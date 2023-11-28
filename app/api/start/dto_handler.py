@@ -1,11 +1,11 @@
 """ dto_handler.py """
-from app.api.base_impl.dto_base import DTOHandlerBase
-from app.api.start.schema import StartResponseSchema, StartRequestSchema
-
 from flask import request
 
+from app.api.start.schema import StartResponseSchema, StartRequestSchema
+from app.api.user.model import User
 
-class StartDTOHandler(DTOHandlerBase):
+
+class StartDTOHandler:
     """This a data transfer abstraction layer. It's responsible for proper
      data validation, serialization and deserialization.
 
@@ -15,13 +15,15 @@ class StartDTOHandler(DTOHandlerBase):
     request_schema = StartRequestSchema()
 
     @classmethod
-    def create_item(cls):
+    def init_game(cls):
         """Validate input data and return encrypted id or raise validation
          error.
 
         :return: encrypted id
         """
         data = request.json
-        model_instance = cls.request_schema.load(data)
-        inserted_id = ApartmentConfigsRepository.add_item(model_instance)
+        start_data = cls.request_schema.load(data)
+        user = User(username=start_data.get('username'),
+                    score=0,
+                    skin=start_data.get('skin'))
         return jsonify({'inserted_id': encrypt_id(str(inserted_id))})

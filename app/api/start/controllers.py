@@ -8,5 +8,5 @@ start_bp = Blueprint("start", __name__)
 
 @start_bp.route('/start/', methods=['POST'], strict_slashes=False)
 def start_game():
-    StartDTOHandler.create_item()
+    StartDTOHandler.init_game()
     return "started"

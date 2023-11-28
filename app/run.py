@@ -1,7 +1,9 @@
 import os
+from typing import Optional
 
 from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.api.start.controllers import start_bp
 from app.config import Config
@@ -45,9 +47,11 @@ def create_app(config_class: Config = Config):
 
         app.register_blueprint(start_bp, url_prefix='/api/')
 
-        # create database
+
+        #create database
         # with app.app_context():
         #     db.create_all()
+        #     # db.drop_all()
 
     return app
 

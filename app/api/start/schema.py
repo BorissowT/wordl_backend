@@ -68,12 +68,3 @@ class StartRequestSchema(Schema):
         if value < 1 or value > 10:
             raise ValidationError("invalid 'amount_users' param.")
 
-    @post_load
-    def make_apartment_configs(self, data: dict, **kwargs):
-        """Deserialize passed data to data model.
-
-        :param data: data from response
-        :param kwargs: other params
-        :return: model instance
-        """
-        pass
