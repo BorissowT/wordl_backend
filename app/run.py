@@ -1,12 +1,10 @@
 import os
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from app.api.start.controllers import start_bp
 from app.config import Config
-from flask_swagger_ui import get_swaggerui_blueprint
-
 from app.extensions import db
 
 

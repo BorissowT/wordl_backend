@@ -272,25 +272,16 @@
             "type": "string",
             "description": "Unix Timestamp",
             "example": "41342341"
+          },
+          "rounds": {
+            "type": "integer",
+            "example": 2
+          },
+          "lapTime": {
+            "description": "time for a round in minutes",
+            "type": "integer",
+            "example": 2
           }
-        },
-        "example": {
-          "users": [
-            {
-              "username": "tim",
-              "score": 50
-            },
-            {
-              "username": "usermock",
-              "score": 55
-            }
-          ],
-          "words": [
-            "start",
-            "earth",
-            "brown"
-          ],
-          "startedAt": 1699366130
         }
       },
       "startOwnerRequest": {
