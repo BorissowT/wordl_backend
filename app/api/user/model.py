@@ -1,11 +1,14 @@
 """ user/model.py """
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+
 from app.extensions import db
 
 
 class User(db.Model):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    score = db.Column(db.Integer)
-    skin = db.Column(db.Integer)
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    score = Column(Integer)
+    skin = Column(Integer)

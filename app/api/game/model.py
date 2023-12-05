@@ -1,8 +1,7 @@
 """ game/model.py """
-from typing import List, Optional
 
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
 from app.extensions import db
 
@@ -10,10 +9,11 @@ from app.extensions import db
 class Game(db.Model):
     __tablename__ = "game"
 
-    id = db.Column(db.Integer, primary_key=True)
-    started_at = db.Column(db.Integer)
-    rounds = db.Column(db.Integer)
-    lap_time = db.Column(db.Integer)
-    amount_users = db.Column(db.Integer)
-    owner_id: Mapped[int] = mapped_column()
-    users: Mapped[Optional["User"]] = relationship()
+    id = Column(Integer, primary_key=True)
+    started_at = Column(Integer)
+    rounds = Column(Integer)
+    lap_time = Column(Integer)
+    amount_users = Column(Integer)
+    owner_id = Column(Integer, ForeignKey('user.id'))
+    owner = relationship("User")
+    users = relationship("User", uselist=True)

@@ -48,7 +48,7 @@ def create_app(config_class: Config = Config):
         app.register_blueprint(start_bp, url_prefix='/api/')
 
 
-        #create database
+        # #create database
         # with app.app_context():
         #     db.create_all()
         #     # db.drop_all()
