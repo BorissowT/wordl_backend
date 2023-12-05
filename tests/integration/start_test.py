@@ -51,7 +51,7 @@ def test_set_user_ready(client):
     THEN check the response status code
     """
     game_id = 123
-    headers = {"Authorization": "Bearer YOUR_TOKEN"}
+    headers = {"Authorization": "Bearer TOKEN"}
     response = client.post(f"/api/game/{game_id}/ready", headers=headers)
     assert response.status_code in (102, 200, 400, 403, 404)
 
