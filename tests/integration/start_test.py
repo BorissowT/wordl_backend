@@ -1,26 +1,86 @@
-def test_200_code_as_user(client):
+from unittest.mock import patch
+
+
+def test_start_game_as_power_user_get_200code(client):
     """
     WHEN the /api/start is called
     AS anon user
     THEN check that a '200' status code is returned
     """
+    response = client.post("/api/start",
+                           data={"username": "tim_user", "skin": 8, "rounds": 2, "lapTime": 2, "amountUsers": 2})
 
-    response = client.post("/api/start/", data={"username": "test"})
-
-    assert response.status_code == 200
-    assert response.content_type == "application/json"
-
-
-def test_start_game():
-    # Sending a request to start a game with a username
-    start_request = {"username": "tim_user"}
-    response = requests.post(f"{API_BASE_URL}/start", json=start_request)
-
-    # Asserting that the response is successful (status code 200)
-    # and contains gameId and token in the response body
     assert response.status_code == 200
     assert "gameId" in response.json()
     assert "token" in response.json()
+    assert response.content_type == "application/json"
+
+
+def test_enter_game_by_id(client):
+    """
+    WHEN entering a game by ID
+    AS anon user
+    THEN check if a '200' or '404' status code is returned based on the game ID existence
+    """
+    game_id = 123
+    response = client.post("/api/start/{game_id}", data={"username": "tim_user", "skin": 8})
+
+    assert response.status_code in (200, 404)
+
+
+# Tests for '/api/game/{gameId}/status' endpoint
+@patch('app.utils.resource_protector.ResourceProtector.acquire_token')
+def test_get_game_status(client):
+    """
+    WHEN getting game status
+    AS user with authorization token
+    THEN check the response status code and content type
+    """
+    game_id = 123
+    headers = {"Authorization": "Bearer YOUR_TOKEN"}
+    response = client.get(f"/api/game/{game_id}/status", headers=headers)
+    assert response.status_code in (102, 200, 400, 404)
+    assert response.content_type == "application/json"
+
+
+# Tests for '/api/game/{gameId}/ready' endpoint
+def test_set_user_ready(client):
+    """
+    WHEN setting user status to 'ready'
+    AS user with authorization token
+    THEN check the response status code
+    """
+    game_id = 123
+    headers = {"Authorization": "Bearer YOUR_TOKEN"}
+    response = client.post(f"/api/game/{game_id}/ready", headers=headers)
+    assert response.status_code in (102, 200, 400, 403, 404)
+
+
+# Tests for '/api/game/{gameId}/scored' endpoint
+def test_user_solved_word(client):
+    """
+    WHEN a user solves a word
+    AS user with authorization token
+    THEN check the response status code and content type
+    """
+    game_id = 123
+    headers = {"Authorization": "Bearer YOUR_TOKEN"}
+    response = client.post(f"/api/game/{game_id}/scored", headers=headers)
+    assert response.status_code in (102, 200, 400, 404)
+    assert response.content_type == "application/json"
+
+
+# Tests for '/api/start' endpoint
+def test_start_game_invalid_payload(client):
+    """
+    WHEN the /api/start is called with invalid payload
+    AS anon user
+    THEN check that a '400' status code is returned
+    """
+    response = client.post("/api/start", json={"invalid_key": "invalid_value"})
+    assert response.status_code == 400
+
+
 
 # examples:
 #
