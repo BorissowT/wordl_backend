@@ -1,10 +1,18 @@
-from flask import Flask
+import os
+from typing import Optional
 
-from app.config import Config
+from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.api.start.controllers import start_bp
+from app.config import Config
+from app.extensions import db
 
 
 def create_app(config_class: Config = Config):
+
+    basedir = os.path.abspath(os.path.dirname(__file__))
 
     # Create app
     app = Flask(__name__)
@@ -12,7 +20,12 @@ def create_app(config_class: Config = Config):
     # Set configuration variables
     app.config.from_object(config_class)
     app.secret_key = app.config['SECRET_KEY']
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
     app.url_map.strict_slashes = False
+
+    db.init_app(app)
+    # db = SQLAlchemy(app)
 
     if config_class.FLASK_ENV == "development":
         # init swagger
@@ -26,23 +39,34 @@ def create_app(config_class: Config = Config):
             config={  # Swagger UI config overrides
                 'app_name': "Sidecar application"
             },
-            # oauth_config={  # OAuth config.
-            # See
-            # https://github.com/swagger-api/swagger-ui#oauth2-configuration .
-            #    'clientId': "your-client-id",
-            #    'clientSecret': "your-client-secret-if-required",
-            #    'realm': "your-realms",
-            #    'appName': "your-app-name",
-            #    'scopeSeparator': " ",
-            #    'additionalQueryStringParams': {'test': "hello"}
-            # }
+
         )
         app.register_blueprint(swaggerui_blueprint)
 
+        # register blueprints here
+
+        app.register_blueprint(start_bp, url_prefix='/api/')
+
+
+        # #create database
+        # with app.app_context():
+        #     db.create_all()
+        #     # db.drop_all()
 
     return app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True, host="0.0.0.0", port=5005)
+
+# import os
+#
+# from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy
+#
+# basedir = os.path.abspath(os.path.dirname(__file__))
+#
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] =\
+#         'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#
+# db = SQLAlchemy(app)

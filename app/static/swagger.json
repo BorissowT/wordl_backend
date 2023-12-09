@@ -71,7 +71,7 @@
         "tags": [
           "game"
         ],
-        "description": "Use this endpoint to set user status to \"ready\"",
+        "description": "Use this endpoint to set user status to \"ready\". Only Owner of the game is allowed to start the game.",
         "summary": "Use this endpoint to set user status to \"ready\"",
         "parameters": [
           {
@@ -99,10 +99,13 @@
             "description": "the game has not started yet"
           },
           "200": {
-            "description": "set to ready"
+            "description": "the game just started"
           },
           "400": {
             "description": "parameter validation failed"
+          },
+          "403": {
+            "description": "you are not allowd to start the game"
           },
           "404": {
             "description": "the game was not found"
@@ -165,7 +168,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/startRequest"
+                "$ref": "#/components/schemas/startOwnerRequest"
               }
             }
           },
@@ -211,7 +214,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/startRequest"
+                "$ref": "#/components/schemas/startJoinByLinkrRequest"
               }
             }
           },
@@ -269,33 +272,55 @@
             "type": "string",
             "description": "Unix Timestamp",
             "example": "41342341"
+          },
+          "rounds": {
+            "type": "integer",
+            "example": 2
+          },
+          "lapTime": {
+            "description": "time for a round in minutes",
+            "type": "integer",
+            "example": 2
           }
-        },
-        "example": {
-          "users": [
-            {
-              "username": "tim",
-              "score": 50
-            },
-            {
-              "username": "usermock",
-              "score": 55
-            }
-          ],
-          "words": [
-            "start",
-            "earth",
-            "brown"
-          ],
-          "startedAt": 1699366130
         }
       },
-      "startRequest": {
+      "startOwnerRequest": {
         "type": "object",
         "properties": {
           "username": {
             "type": "string",
             "example": "tim_user"
+          },
+          "skin": {
+            "type": "integer",
+            "example": 8
+          },
+          "rounds": {
+            "type": "integer",
+            "example": 2
+          },
+          "lapTime": {
+            "description": "time for a round in minutes",
+            "type": "integer",
+            "example": 2
+          },
+          "amountUsers": {
+            "description": "amount of users for game",
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "startJoinByLinkrRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "tim_user"
+          },
+          "skin": {
+            "type": "integer",
+            "example": 8
           }
         }
       },
