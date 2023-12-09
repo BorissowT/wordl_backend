@@ -1,6 +1,6 @@
 """ game/model.py """
 
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from app.extensions import db
@@ -10,6 +10,7 @@ class Game(db.Model):
     __tablename__ = "game"
 
     id = Column(Integer, primary_key=True)
+    game_id = Column(String)
     started_at = Column(Integer)
     rounds = Column(Integer)
     lap_time = Column(Integer)

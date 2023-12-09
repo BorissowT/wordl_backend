@@ -5,6 +5,8 @@ from app.api.game.model import Game
 from app.api.start.schema import StartResponseSchema, StartRequestSchema
 from app.api.user.model import User
 from app.extensions import db
+from app.utils.game_id_generator import GameIdGenerator
+from app.utils.token_generator import TokenGenerator
 
 
 class StartDTOHandler:
@@ -34,6 +36,7 @@ class StartDTOHandler:
         # create game
         game = Game(
             started_at="",
+            game_id=GameIdGenerator.generate_url_token(),
             rounds=start_data.get('rounds'),
             lap_time=start_data.get('lap_time'),
             amount_users=start_data.get('amount_users'),
@@ -41,4 +44,10 @@ class StartDTOHandler:
         )
         db.session.add(game)
         db.session.commit()
-        return jsonify({'inserted_id': encrypt_id(str(inserted_id))})
+
+        token = TokenGenerator.generate_token(user_id=user.id,
+                                              username=user.username)
+        # response schema
+        response = cls.response_schema.dump({'game_id': game.game_id,
+                                             'token': token})
+        return response
