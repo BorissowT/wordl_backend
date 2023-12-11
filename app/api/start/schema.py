@@ -15,8 +15,30 @@ class StartResponseSchema(Schema):
     token = fields.Str(dumps_only=True)
 
 
-class StartRequestSchema(Schema):
+class JoinSchema(Schema):
+    username = fields.Str(required=True)
+    skin = fields.Int(required=True)
 
+    @validates("username")
+    def validate_username(self, value):
+        """Filter out responses with empty characters.
+
+        :param value: value to validate
+        """
+        if value.strip() == "":
+            raise ValidationError("username cannot be an empty string.")
+
+    @validates("skin")
+    def validate_skin(self, value: int):
+        """Filter out responses with invalid skins.
+
+        :param value: value to validate
+        """
+        if value > 10 or value < 1:
+            raise ValidationError("skin does not exist.")
+
+
+class StartRequestSchema(Schema):
     username = fields.Str(required=True)
     skin = fields.Int(required=True)
     rounds = fields.Int(required=True)
