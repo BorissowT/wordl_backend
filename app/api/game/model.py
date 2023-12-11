@@ -1,6 +1,6 @@
 """ game/model.py """
 
-from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy import Column, Integer, ForeignKey, String, JSON
 from sqlalchemy.orm import relationship
 
 from app.extensions import db
@@ -18,3 +18,4 @@ class Game(db.Model):
     owner_id = Column(Integer, ForeignKey('user.id'))
     owner = relationship("User")
     users = relationship("User", uselist=True)
+    words = Column(JSON, default=[])

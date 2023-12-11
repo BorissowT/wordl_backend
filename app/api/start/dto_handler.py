@@ -38,7 +38,7 @@ class StartDTOHandler:
         db.session.commit()
         # create game
         game = Game(
-            started_at="",
+            started_at=0,
             game_id=GameIdGenerator.generate_url_token(),
             rounds=start_data.get('rounds'),
             lap_time=start_data.get('lap_time'),
@@ -70,6 +70,7 @@ class StartDTOHandler:
         if game is None:
             raise NotFoundException('the game not found')
         # TODO if user already in game raise exception
+        # TODO reject if the game is full
         game.users.append(user)
         db.session.commit()
         # generate token
