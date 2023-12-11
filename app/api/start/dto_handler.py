@@ -42,10 +42,13 @@ class StartDTOHandler:
             game_id=GameIdGenerator.generate_url_token(),
             rounds=start_data.get('rounds'),
             lap_time=start_data.get('lap_time'),
-            amount_users=start_data.get('amount_users'),
-            owner=user
+            amount_users=start_data.get('amount_users')
         )
         db.session.add(game)
+        db.session.commit()
+        game.users.append(user)
+        game.owner.append(user)
+        game.owner_id = user.id
         db.session.commit()
 
         token = TokenGenerator.generate_token(user_id=user.id,
@@ -71,6 +74,7 @@ class StartDTOHandler:
             raise NotFoundException('the game not found')
         # TODO if user already in game raise exception
         # TODO reject if the game is full
+        # TODO increase amount of users
         game.users.append(user)
         db.session.commit()
         # generate token

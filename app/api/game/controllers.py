@@ -17,7 +17,7 @@ def ready_game(game_id: str):
 
 
 @game_bp.route('/game/<game_id>/status',
-               methods=['POST'],
+               methods=['GET'],
                strict_slashes=False)
 @add_api_error_responses
 def get_status_game(game_id: str):

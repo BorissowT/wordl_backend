@@ -4,7 +4,8 @@ import time
 from flask import jsonify
 
 from app.api.game.model import Game
-from app.extensions import db, wordl_generator
+from app.api.game.schema import GameStatusResponseSchema
+from app.extensions import db
 from app.utils.custom_exceptions import NotFoundException, \
     NotEnoughPermissionsException
 from app.utils.user_identifier import UserIdentifier
@@ -12,6 +13,9 @@ from app.utils.wordl_generator import WordlWordsGenerator
 
 
 class GameDTOHandler:
+
+    response_schema = GameStatusResponseSchema()
+
     @classmethod
     def ready(cls, game_id):
         game: Game = (db.session.query(Game)
@@ -19,7 +23,7 @@ class GameDTOHandler:
         if game is None:
             raise NotFoundException('the game not found')
         user = UserIdentifier.get_user()
-        if game.owner != user:
+        if game.owner_id != user.id:
             raise NotEnoughPermissionsException('you are not allowed to start'
                                                 ' the game')
         current_time_struct = time.gmtime()
@@ -27,7 +31,7 @@ class GameDTOHandler:
         # Convert the struct_time to a Unix timestamp
         unix_timestamp = int(time.mktime(current_time_struct))
         game.started_at = unix_timestamp
-        game.words = wordl_generator.generate(rounds=game.rounds)
+        game.words = WordlWordsGenerator.generate(rounds=game.rounds)
         db.session.commit()
 
     @classmethod
@@ -38,7 +42,12 @@ class GameDTOHandler:
             raise NotFoundException('the game not found')
         if game.started_at == 0:
             return jsonify('the game has not started yet'), 201
-
-
-
+        users_in_dict = [user.to_dict() for user in game.users]
+        response = cls.response_schema.dump({
+            'startedAt': game.started_at,
+            'rounds': game.rounds,
+            'words': game.words,
+            'users': users_in_dict
+        })
+        return response
 
