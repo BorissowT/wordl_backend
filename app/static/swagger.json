@@ -95,9 +95,6 @@
           }
         ],
         "responses": {
-          "102": {
-            "description": "the game has not started yet"
-          },
           "200": {
             "description": "the game just started"
           },

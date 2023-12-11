@@ -5,6 +5,7 @@ from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.api.game.controllers import game_bp
 from app.api.start.controllers import start_bp
 from app.config import Config
 from app.extensions import db
@@ -46,6 +47,7 @@ def create_app(config_class: Config = Config):
         # register blueprints here
 
         app.register_blueprint(start_bp, url_prefix='/api/')
+        app.register_blueprint(game_bp, url_prefix='/api/')
 
 
         # #create database

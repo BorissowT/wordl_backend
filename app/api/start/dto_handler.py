@@ -6,6 +6,7 @@ from app.api.start.schema import StartResponseSchema, StartRequestSchema, \
     JoinSchema
 from app.api.user.model import User
 from app.extensions import db
+from app.utils.custom_exceptions import NotFoundException
 from app.utils.game_id_generator import GameIdGenerator
 from app.utils.token_generator import TokenGenerator
 
@@ -66,7 +67,9 @@ class StartDTOHandler:
         db.session.commit()
 
         game = db.session.query(Game).filter(Game.game_id == game_id).first()
-        # TODO add user to users
+        if game is None:
+            raise NotFoundException('the game not found')
+        # TODO if user already in game raise exception
         game.users.append(user)
         db.session.commit()
         # generate token

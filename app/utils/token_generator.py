@@ -1,4 +1,8 @@
+from datetime import datetime, timedelta
+
 import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
+
 from app.config import Config
 
 
@@ -7,20 +11,30 @@ class TokenGenerator:
 
     @classmethod
     def generate_token(cls, user_id, username):
-        token = jwt.encode({"user_id": user_id, "username": username},
-                           cls.secret_key,
-                           algorithm='HS256')
+        # Set expiration time to a distant future (e.g., 10 years)
+        expiration_time = datetime.utcnow() + timedelta(days=3650)
+
+        token = jwt.encode(
+            {"user_id": user_id, "username": username, "exp": expiration_time},
+            cls.secret_key,
+            algorithm='HS256'
+        )
         return token
 
-    def decode_token(self, token):
+    @classmethod
+    def decode_token(cls, token):
         try:
-            decoded_data = jwt.decode(token, self.secret_key, algorithms=['HS256'])
+            decoded_data = jwt.decode(token,
+                                      cls.secret_key,
+                                      algorithms='HS256')
             return decoded_data
-        except jwt.ExpiredSignatureError:
+        except jwt.ExpiredSignatureError as e:
             # Handle token expiration if needed
-            print("Token has expired.")
-            return None
-        except jwt.InvalidTokenError:
+            raise ExpiredSignatureError(e)
+        except jwt.InvalidTokenError as e:
             # Handle invalid token
-            print("Invalid token.")
+            raise InvalidTokenError(e)
+        except Exception as e:
+            # Handle other JWT errors
+            print(f"JWT decoding error: {str(e)}")
             return None
