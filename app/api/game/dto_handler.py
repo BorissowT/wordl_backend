@@ -7,7 +7,7 @@ from app.api.game.model import Game
 from app.api.game.schema import GameStatusResponseSchema
 from app.extensions import db
 from app.utils.custom_exceptions import NotFoundException, \
-    NotEnoughPermissionsException
+    NotEnoughPermissionsException, TheGameHasNotStartedException
 from app.utils.user_identifier import UserIdentifier
 from app.utils.wordl_generator import WordlWordsGenerator
 
@@ -41,7 +41,7 @@ class GameDTOHandler:
         if game is None:
             raise NotFoundException('the game not found')
         if game.started_at == 0:
-            return jsonify('the game has not started yet'), 201
+            return TheGameHasNotStartedException()
         users_in_dict = [user.to_dict() for user in game.users]
         response = cls.response_schema.dump({
             'startedAt': game.started_at,
@@ -51,3 +51,14 @@ class GameDTOHandler:
         })
         return response
 
+    @classmethod
+    def score_user(cls, game_id):
+        game: Game = (db.session.query(Game)
+                      .filter(Game.game_id == game_id).first())
+        if game is None:
+            raise NotFoundException('the game not found')
+        if game.started_at == 0:
+            raise TheGameHasNotStartedException()
+        user = UserIdentifier.get_user()
+        user.score += 30
+        db.session.commit()

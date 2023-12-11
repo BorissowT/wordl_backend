@@ -33,6 +33,8 @@ def add_api_error_responses(controller_func):
             ErrorHandler.response_400(message=str(e))
         except InvalidTokenError as e:
             ErrorHandler.response_400(message=str(e))
+        except TheGameHasNotStartedException as e:
+            ErrorHandler.response_201(message=str(e))
     return wrapper
 
 
@@ -64,3 +66,11 @@ class ErrorHandler:
         :param message: error message
         """
         abort(make_response(jsonify(message=message), 400))
+
+    @classmethod
+    def response_201(cls, message):
+        """ Return 201 status
+
+                :param message: message
+                """
+        abort(make_response(jsonify(message=message), 201))

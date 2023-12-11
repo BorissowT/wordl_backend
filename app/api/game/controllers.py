@@ -23,3 +23,11 @@ def ready_game(game_id: str):
 def get_status_game(game_id: str):
     return GameDTOHandler.get_status(game_id=game_id)
 
+
+@game_bp.route('/game/<game_id>/scored',
+               methods=['POST'],
+               strict_slashes=False)
+@add_api_error_responses
+def score_user(game_id: str):
+    GameDTOHandler.score_user(game_id=game_id)
+    return jsonify("user score is updated"), 200

@@ -37,3 +37,12 @@ class IdEncryptionException(Exception):
         super().__init__(self.message)
 
     pass
+
+
+class TheGameHasNotStartedException(Exception):
+    def __init__(self,
+                 message="The game has not started yet"):
+        self.message = message
+        super().__init__(self.message)
+
+    pass
