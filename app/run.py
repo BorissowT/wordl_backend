@@ -17,16 +17,14 @@ def dump_words():
     # TODO refacotr this function to another package
     response = requests.get(url)
     five_letter_words = [word.strip() for word in response.text.splitlines()
-                          if len(word.strip()) == 5]
+                         if len(word.strip()) == 5]
     for word in five_letter_words:
         model = Word(word=word)
         db.session.add(model)
     db.session.commit()
 
 
-
 def create_app(config_class: Config = Config):
-
     basedir = os.path.abspath(os.path.dirname(__file__))
 
     # Create app
@@ -64,15 +62,12 @@ def create_app(config_class: Config = Config):
         app.register_blueprint(start_bp, url_prefix='/api/')
         app.register_blueprint(game_bp, url_prefix='/api/')
 
-
         # #create database
         # with app.app_context():
         #     db.create_all()
         #     dump_words()
 
     return app
-
-
 
 # import os
 #

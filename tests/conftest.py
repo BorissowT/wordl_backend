@@ -22,7 +22,6 @@ def app():
     # clean up / reset resources here
 
 
-
 @pytest.fixture(autouse=True)
 def client(app):
     """Client to execute test requests like post, get etc.
