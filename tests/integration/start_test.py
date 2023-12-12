@@ -239,6 +239,7 @@ def test_start_game_invalid_payload(client):
     response = client.post("/api/start", json={"invalid_key": "invalid_value"})
     assert response.status_code == 400
 
+
 # examples:
 #
 # @patch('app.utils.resource_protector.ResourceProtector.acquire_token')
