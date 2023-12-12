@@ -9,8 +9,9 @@ Create a `.env` file inside the project folder and add the following content:
 
 ```shell
 SECRET_KEY="your secret key"
-SQLALCHEMY_DATABASE_URI="sqlite:////test.db"
 FLASK_ENV=development
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+FLASK_APP = app/run.py
 ```
 
 Make sure to replace `"your secret key"` with your actual secret key.
