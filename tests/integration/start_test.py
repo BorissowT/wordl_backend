@@ -239,10 +239,10 @@ def test_start_game_invalid_payload(client):
     assert response.status_code == 400
 
 
-def test_if_new_player_can_join_with_invitation_link(client):
+def test_if_new_player_cannot_join_with_wrong_game_id(client):
     """
-    WHEN new player enters a game by invitation link with a valid game ID
-    THEN check if a '200' status code is returned
+    WHEN new player enters a game by invitation link with a wrong game ID
+    THEN check if a '404' status code is returned
     """
     invitation_data = {"username": "tim_user", "skin": 9, "rounds": 2,
                        "lapTime": 2, "amountUsers": 2}
@@ -252,8 +252,8 @@ def test_if_new_player_can_join_with_invitation_link(client):
     game_id = response_json.get('game_id')
     invited_user_data = {"username": "tim_user", "skin": 8}
 
-    response = client.post(f"/api/start/{game_id}", json=invited_user_data)
-    assert response.status_code == 200
+    response = client.post(f"/api/start/{123}", json=invited_user_data)
+    assert response.status_code == 404
     assert response.content_type == "application/json"
 
 
