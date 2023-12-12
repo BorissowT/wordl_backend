@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pytest
-import pytest_subtests
 
 
 def test_start_game_as_power_user_get_200code(client):
