@@ -1,13 +1,29 @@
 import os
 from typing import Optional
 
+import requests
 from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.api.game.controllers import game_bp
+from app.api.game.model import Word
 from app.api.start.controllers import start_bp
 from app.config import Config
 from app.extensions import db
+
+
+def dump_words():
+    url = "https://www.mit.edu/~ecprice/wordlist.100000"
+    # TODO refacotr this function to another package
+    response = requests.get(url)
+    five_letter_words = [word.strip() for word in response.text.splitlines()
+                          if len(word.strip()) == 5]
+    for word in five_letter_words:
+        model = Word(word=word)
+        db.session.add(model)
+    db.session.commit()
+
 
 
 def create_app(config_class: Config = Config):
@@ -29,6 +45,7 @@ def create_app(config_class: Config = Config):
 
     if config_class.FLASK_ENV == "development":
         # init swagger
+
         SWAGGER_URL = '/api/docs'
         # URL for exposing Swagger UI (without trailing '/')
         API_URL = '/static/swagger.json'
@@ -46,12 +63,13 @@ def create_app(config_class: Config = Config):
         # register blueprints here
 
         app.register_blueprint(start_bp, url_prefix='/api/')
+        app.register_blueprint(game_bp, url_prefix='/api/')
 
 
         # #create database
         # with app.app_context():
         #     db.create_all()
-        #     # db.drop_all()
+        #     dump_words()
 
     return app
 

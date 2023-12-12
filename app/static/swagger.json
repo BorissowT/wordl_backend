@@ -44,9 +44,6 @@
           }
         ],
         "responses": {
-          "102": {
-            "description": "the game has not started yet"
-          },
           "200": {
             "description": "the dame started",
             "content": {
@@ -56,6 +53,9 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "the game has not started yet"
           },
           "400": {
             "description": "parameter validation failed"
@@ -95,9 +95,6 @@
           }
         ],
         "responses": {
-          "102": {
-            "description": "the game has not started yet"
-          },
           "200": {
             "description": "the game just started"
           },
