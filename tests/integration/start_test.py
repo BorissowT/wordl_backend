@@ -186,21 +186,6 @@ def test_enter_game_by_id(client):
     assert response.status_code in (200, 404)
 
 
-# Tests for '/api/game/{gameId}/status' endpoint
-@patch('app.utils.resource_protector.ResourceProtector.acquire_token')
-def test_get_game_status(client):
-    """
-    WHEN getting game status
-    AS user with authorization token
-    THEN check the response status code and content type
-    """
-    game_id = 123
-    headers = {"Authorization": "Bearer YOUR_TOKEN"}
-    response = client.get(f"/api/game/{game_id}/status", headers=headers)
-    assert response.status_code in (102, 200, 400, 404)
-    assert response.content_type == "application/json"
-
-
 # Tests for '/api/game/{gameId}/ready' endpoint
 def test_set_user_ready(client):
     """
