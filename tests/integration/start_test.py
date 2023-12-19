@@ -91,7 +91,11 @@ def test_start_game_empty_username(client):
     WHEN the /api/start is called with an empty username
     THEN check that a '400' status code is returned
     """
-    response = client.post("/api/start", json={"username": "", "skin": 5, "rounds": 2, "lapTime": 2, "amountUsers": 2})
+    response = client.post("/api/start", json={"username": "",
+                                               "skin": 5,
+                                               "rounds": 2,
+                                               "lapTime": 2,
+                                               "amountUsers": 2})
     assert response.status_code == 400
     assert response.content_type == "application/json"
 
@@ -181,16 +185,17 @@ def test_enter_game_by_id(client):
     """
     WHEN entering a game by ID
     AS anon user
-    THEN check if a '200' or '404' status code is returned based on the game ID existence
+    THEN check if a '200' or '404' status code is returned based
+        on the game ID existence
     """
     game_id = 123
-    response = client.post("/api/start/{game_id}", data={"username": "tim_user", "skin": 8})
+    response = client.post(f"/api/start/{game_id}",
+                           json={"username": "tim_user", "skin": 8})
 
-    assert response.status_code in (200, 404)
+    assert response.status_code == 404
 
 
 # Tests for '/api/game/{gameId}/status' endpoint
-@patch('app.utils.resource_protector.ResourceProtector.acquire_token')
 def test_get_game_status(client):
     """
     WHEN getting game status

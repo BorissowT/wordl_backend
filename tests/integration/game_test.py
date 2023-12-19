@@ -4,10 +4,21 @@ def test_user_solved_word(client):
     AS user with authorization token
     THEN check the response status code and content type
     """
-    game_id = 123
-    headers = {"Authorization": "Bearer YOUR_TOKEN"}
-    response = client.post(f"/api/game/{game_id}/scored", headers=headers)
-    assert response.status_code in (102, 200, 400, 404)
+
+    response = client.post("/api/start", json={"username": "testo",
+                                               "skin": 5,
+                                               "rounds": 2,
+                                               "lapTime": 2,
+                                               "amountUsers": 2})
+    token = response.json["token"]
+    game_id = response.json["gameId"]
+    response = client.post(f"/api/game/{game_id}/ready",
+                           headers={"Authorization": f"{token}"})
+
+    response = client.post(f"/api/game/{game_id}/scored",
+                           headers={"Authorization": f"{token}"},
+                           json={"points": 10})
+    assert response.status_code == 200
     assert response.content_type == "application/json"
 
 
@@ -52,7 +63,7 @@ def test_if_game_id_is_the_same_when_new_player_joins_with_invitation_link(
 
     response_of_start_player = client.post("/api/start/", json=invitation_data)
     response_json = response_of_start_player.json
-    game_id_start_player = response_json.get('game_id')
+    game_id_start_player = response_json.get('gameId')
     invited_user_data = {"username": "tim_user2", "skin": 8}
     response_of_new_player = client.post(f"/api/start/{game_id_start_player}",
                                          json=invited_user_data)
