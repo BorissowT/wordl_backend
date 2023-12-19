@@ -10,7 +10,8 @@ from jwt import InvalidTokenError
 from marshmallow import ValidationError
 
 from app.utils.custom_exceptions import NotFoundException, \
-    NotEnoughPermissionsException, ParameterException, IdEncryptionException
+    NotEnoughPermissionsException, ParameterException, IdEncryptionException, \
+    TheGameHasNotStartedException
 
 
 def add_api_error_responses(controller_func):

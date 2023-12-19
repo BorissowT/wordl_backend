@@ -7,5 +7,5 @@ class GameStatusResponseSchema(Schema):
     rounds = fields.Int(dumps_only=True)
     lap_time = fields.Int(dumps_only=True, data_key="lapTime")
     users = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
-    words = fields.List(fields.List(fields.Str()))
+    words = fields.List(fields.Str())
 

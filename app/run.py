@@ -1,10 +1,8 @@
 import os
-from typing import Optional
 
 import requests
 from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.api.game.controllers import game_bp
 from app.api.game.model import Word
@@ -23,7 +21,6 @@ def dump_words():
         model = Word(word=word)
         db.session.add(model)
     db.session.commit()
-
 
 
 def create_app(config_class: Config = Config):
