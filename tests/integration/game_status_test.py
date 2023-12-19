@@ -1,7 +1,3 @@
-from unittest.mock import patch
-
-import pytest
-
 
 # Tests for '/api/game/{gameId}/status' endpoint
 def test_get_game_status_authorisation_error(client):
