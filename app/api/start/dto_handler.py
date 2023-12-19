@@ -73,7 +73,10 @@ class StartDTOHandler:
         game = db.session.query(Game).filter(Game.game_id == game_id).first()
         if game is None:
             raise NotFoundException('the game not found')
-        # TODO if user already in game raise exception
+        for registered_user in game.users:
+            if registered_user.username == user.username:
+                raise NotEnoughPermissionsException("User with this "
+                                                    "username already in game")
         if len(game.users) == game.amount_users:
             raise NotEnoughPermissionsException("The game is full")
 
