@@ -6,7 +6,8 @@ from app.api.start.schema import StartResponseSchema, StartRequestSchema, \
     JoinSchema
 from app.api.user.model import User
 from app.extensions import db
-from app.utils.custom_exceptions import NotFoundException
+from app.utils.custom_exceptions import NotFoundException, \
+    NotEnoughPermissionsException
 from app.utils.game_id_generator import GameIdGenerator
 from app.utils.token_generator import TokenGenerator
 
@@ -73,9 +74,9 @@ class StartDTOHandler:
         if game is None:
             raise NotFoundException('the game not found')
         # TODO if user already in game raise exception
-        # TODO reject if the game is full
-        # TODO increase amount of users
-        game.users.append(user)
+        if len(game.users) == game.amount_users:
+            raise NotEnoughPermissionsException("The game is full")
+
         db.session.commit()
         # generate token
         token = TokenGenerator.generate_token(user_id=user.id,
