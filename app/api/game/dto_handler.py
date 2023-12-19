@@ -54,6 +54,7 @@ class GameDTOHandler:
     @classmethod
     def score_user(cls, game_id):
         data = request.json
+        # TODO if the user in game
         points = data.get('points')
         game: Game = (db.session.query(Game)
                       .filter(Game.game_id == game_id).first())
