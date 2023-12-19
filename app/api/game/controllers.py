@@ -1,5 +1,5 @@
 """ controllers.py """
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 from app.api.game.dto_handler import GameDTOHandler
 from app.utils.error_handler import add_api_error_responses

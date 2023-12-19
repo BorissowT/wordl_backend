@@ -38,6 +38,16 @@ class JoinSchema(Schema):
             raise ValidationError("skin does not exist.")
 
 
+class ScoredSchema(Schema):
+    points = fields.Int(required=True)
+
+    @validates("points")
+    def validate_points(self, value):
+        """Filter out responses with invalid points"""
+        if value >= 0 or value <= 6:
+            raise ValidationError("points are not active")
+
+
 class StartRequestSchema(Schema):
     username = fields.Str(required=True)
     skin = fields.Int(required=True)

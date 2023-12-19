@@ -1,10 +1,11 @@
 """ dto_handler.py """
 import time
 
-from flask import jsonify
+from flask import request
 
 from app.api.game.model import Game
 from app.api.game.schema import GameStatusResponseSchema
+from app.api.user.model import User
 from app.extensions import db
 from app.utils.custom_exceptions import NotFoundException, \
     NotEnoughPermissionsException, TheGameHasNotStartedException
@@ -53,12 +54,25 @@ class GameDTOHandler:
 
     @classmethod
     def score_user(cls, game_id):
+        data = request.json
+        points = data.get('points')
         game: Game = (db.session.query(Game)
                       .filter(Game.game_id == game_id).first())
+        user = UserIdentifier.get_user()
+        if not cls._check_if_user_in_game(user, game):
+            raise NotEnoughPermissionsException('User with this username is '
+                                                'not listed in game')
         if game is None:
             raise NotFoundException('the game not found')
         if game.started_at == 0:
             raise TheGameHasNotStartedException()
-        user = UserIdentifier.get_user()
-        user.score += 30
+
+        user.score += points
         db.session.commit()
+
+    @classmethod
+    def _check_if_user_in_game(cls, user: User, game: Game) -> bool:
+        for registered_user in game.users:
+            if registered_user.username == user.username:
+                return True
+        return False
