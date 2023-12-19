@@ -11,7 +11,7 @@ from marshmallow import Schema, fields, validates, ValidationError
 
 class StartResponseSchema(Schema):
 
-    game_id = fields.Str(dumps_only=True)
+    game_id = fields.Str(dumps_only=True, data_key="gameId")
     token = fields.Str(dumps_only=True)
 
 
