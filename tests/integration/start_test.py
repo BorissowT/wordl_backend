@@ -3,16 +3,19 @@ from unittest.mock import patch
 import pytest
 
 
-def test_start_game_as_power_user_get_200code(client):
+def test_create_game_get_200code(client):
     """
     WHEN the /api/start is called
     THEN check that a '200' status code is returned
     """
     response = client.post("/api/start",
-                           data={"username": "tim_user", "skin": 8, "rounds": 2, "lapTime": 2, "amountUsers": 2})
+                           json={"username": "tim_user",
+                                 "skin": 8, "rounds": 2,
+                                 "lapTime": 2, "amountUsers": 2})
+    response_data = response.json
     assert response.status_code == 200
-    assert "gameId" in response.json()
-    assert "token" in response.json()
+    assert "gameId" in response_data
+    assert "token" in response_data
     assert response.content_type == "application/json"
 
 
