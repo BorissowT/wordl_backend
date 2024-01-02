@@ -23,7 +23,7 @@ def test_get_game_status_authorisation_error(client):
     assert response.content_type == "application/json"
 
 
-def test_get_game_status_game_isNot_found(client):
+def test_get_game_status_game_is_not_found(client):
     """
     WHEN getting game status
     THEN check if error response is 404, when game is not found aka game_id is wrong
@@ -61,7 +61,7 @@ def test_get_game_status_game_is_not_started(client):
     headers = {"Authorization": {token}}
 
     response = client.get(f"/api/game/{game_id}/status", headers=headers)
-    assert response.status_code == 201
+    assert response.status_code == 404
     assert response.content_type == "application/json"
 
 

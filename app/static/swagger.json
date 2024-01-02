@@ -54,14 +54,11 @@
               }
             }
           },
-          "201": {
-            "description": "the game has not started yet"
-          },
           "400": {
             "description": "parameter validation failed"
           },
           "404": {
-            "description": "the game was not found"
+            "description": "gam not found or not started yet"
           }
         }
       }
@@ -151,14 +148,11 @@
           "200": {
             "description": "user score is updated"
           },
-          "201": {
-            "description": "the game has not started yet"
-          },
           "400": {
             "description": "parameter validation failed"
           },
           "404": {
-            "description": "the game was not found"
+            "description": "the game was not found or has not started yet"
           }
         }
       }
@@ -260,6 +254,10 @@
             "items": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                },
                 "username": {
                   "type": "string",
                   "example": "tim"
@@ -267,6 +265,10 @@
                 "score": {
                   "type": "integer",
                   "example": 50
+                },
+                "skin": {
+                  "type": "integer",
+                  "example": 2
                 }
               }
             }
