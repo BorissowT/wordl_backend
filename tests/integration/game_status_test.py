@@ -61,7 +61,7 @@ def test_get_game_status_game_is_not_started(client):
     headers = {"Authorization": {token}}
 
     response = client.get(f"/api/game/{game_id}/status", headers=headers)
-    assert response.status_code == 404
+    assert response.status_code == 201
     assert response.content_type == "application/json"
 
 
