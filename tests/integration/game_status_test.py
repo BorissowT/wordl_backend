@@ -56,7 +56,7 @@ def test_get_game_status_game_is_not_started(client):
     response = client.post("/api/start/", json=invitation_data)
 
     response_json = response.json
-    game_id = response_json.get('game_id')
+    game_id = response_json.get('gameId')
     token = response_json.get('token', None)
     headers = {"Authorization": {token}}
 

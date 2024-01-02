@@ -43,7 +43,7 @@ class GameDTOHandler:
         if game is None:
             raise NotFoundException('the game not found')
         if game.started_at == 0:
-            return TheGameHasNotStartedException()
+            raise TheGameHasNotStartedException()
         users_in_dict = [user.to_dict() for user in game.users]
         response = cls.response_schema.dump({
             'startedAt': game.started_at,

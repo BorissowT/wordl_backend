@@ -39,6 +39,8 @@ def test_game_score_update_successful(client):
     game_id = response_json.get('gameId')
     token = response_json.get('token', None)
     headers = {"Authorization": token}
+    client.post(f"/api/game/{game_id}/ready",
+                headers=headers)
 
     # Calling 'scored' endpoint with not existing game id
     response = client.post(f"/api/game/{game_id}/scored",
