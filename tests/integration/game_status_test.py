@@ -88,3 +88,4 @@ def test_game_score_game_not_found(client):
 
     assert response.status_code == 404
     assert response.content_type == "application/json"
+
