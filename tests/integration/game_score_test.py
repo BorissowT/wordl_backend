@@ -16,7 +16,8 @@ def test_game_score_game_not_found(client):
     headers = {"Authorization": token}
 
     # Calling 'scored' endpoint with not existing game id
-    response = client.post(f"/api/game/{game_id}/scored", headers=headers, json={"points": 10})
+    response = client.post(f"/api/game/{game_id}/scored",
+                           headers=headers, json={"points": 10})
 
     assert response.status_code == 404
     assert response.content_type == "application/json"
@@ -35,14 +36,14 @@ def test_game_score_update_successful(client):
 
     response = client.post("/api/start/", json=invitation_data)
     response_json = response.json
-    game_id = response_json.get('game_id')
+    game_id = response_json.get('gameId')
     token = response_json.get('token', None)
     headers = {"Authorization": token}
 
-    client.post(f"/api/game/{game_id}/ready", headers=headers)
-
     # Calling 'scored' endpoint with not existing game id
-    response = client.post(f"/api/game/{game_id}/scored", headers=headers, json={"points": 10})
+    response = client.post(f"/api/game/{game_id}/scored",
+                           headers=headers,
+                           json={"points": 10})
 
     assert response.status_code == 200
     assert response.content_type == "application/json"

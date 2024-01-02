@@ -54,16 +54,18 @@ class GameDTOHandler:
 
     @classmethod
     def score_user(cls, game_id):
+        if game_id is None:
+            raise NotFoundException('the game not found')
         data = request.json
         points = data.get('points')
         game: Game = (db.session.query(Game)
                       .filter(Game.game_id == game_id).first())
         user = UserIdentifier.get_user()
+        if game is None:
+            raise NotFoundException('the game not found')
         if not cls._check_if_user_in_game(user, game):
             raise NotEnoughPermissionsException('User with this username is '
                                                 'not listed in game')
-        if game is None:
-            raise NotFoundException('the game not found')
         if game.started_at == 0:
             raise TheGameHasNotStartedException()
 
