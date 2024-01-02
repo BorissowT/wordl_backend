@@ -8,7 +8,8 @@ from app.api.game.schema import GameStatusResponseSchema
 from app.api.user.model import User
 from app.extensions import db
 from app.utils.custom_exceptions import NotFoundException, \
-    NotEnoughPermissionsException, TheGameHasNotStartedException
+    NotEnoughPermissionsException, TheGameHasNotStartedException, \
+    ParameterException
 from app.utils.user_identifier import UserIdentifier
 from app.utils.wordl_generator import WordlWordsGenerator
 
@@ -58,6 +59,8 @@ class GameDTOHandler:
             raise NotFoundException('the game not found')
         data = request.json
         points = data.get('points')
+        if points <= 0 or points > 50:
+            raise ParameterException("points must be between 0 and 50")
         game: Game = (db.session.query(Game)
                       .filter(Game.game_id == game_id).first())
         user = UserIdentifier.get_user()
