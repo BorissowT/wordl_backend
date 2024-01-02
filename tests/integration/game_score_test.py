@@ -46,3 +46,4 @@ def test_game_score_update_successful(client):
 
     assert response.status_code == 200
     assert response.content_type == "application/json"
+
