@@ -50,7 +50,7 @@ def test_get_game_status_game_isNot_found(client):
     assert response.content_type == "application/json"
 
 
-def test_get_game_status_game_isNot_started(client):
+def test_get_game_status_game_is_not_started(client):
     """
     WHEN getting game status, when the game hasn't been started yet
     THEN check if error response is 201
