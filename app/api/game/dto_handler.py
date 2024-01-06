@@ -46,10 +46,11 @@ class GameDTOHandler:
             raise TheGameHasNotStartedException()
         users_in_dict = [user.to_dict() for user in game.users]
         response = cls.response_schema.dump({
-            'startedAt': game.started_at,
+            'started_at': game.started_at,
             'rounds': game.rounds,
             'words': game.words,
-            'users': users_in_dict
+            'users': users_in_dict,
+            'lap_time': game.lap_time
         })
         return response
 
