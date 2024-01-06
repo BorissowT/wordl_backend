@@ -79,7 +79,7 @@ class StartDTOHandler:
                                                     "username already in game")
         if len(game.users) == game.amount_users:
             raise NotEnoughPermissionsException("The game is full")
-
+        game.users.append(user)
         db.session.commit()
         # generate token
         token = TokenGenerator.generate_token(user_id=user.id,
